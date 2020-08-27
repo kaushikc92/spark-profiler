@@ -158,7 +158,8 @@ def map_column(i, table_name, rows_list, column):
     trait.append(three_gram_nv_tokens)
     trait.append(itype)
     trait.append(common_words)
-    trait.append([float(item) if is_number(item) else item for item in sample])
+    trait.append(sample)
+    #trait.append([float(item) if is_number(item) else item for item in sample])
     return trait
 
 def search_dir():
