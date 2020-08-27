@@ -45,7 +45,7 @@ def search_dir():
     files = glob.glob("{}/*.csv".format(LAKE_DIR), recursive=True)
     return list(map(lambda x: os.path.relpath(x, ROOT_LAKE_DIR), files))
 
-tables_rdd = sc.parallelize(search_dir(LAKE_DIR))
+tables_rdd = sc.parallelize(search_dir())
 profiles_rdd = tables_rdd.flatMap(lambda x: map_table(get_sample(ROOT_LAKE_DIR, x, 1000)))
 df = spark.createDataFrame(profiles_rdd)
 df.show()
