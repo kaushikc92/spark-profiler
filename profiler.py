@@ -10,28 +10,28 @@ ROOT_LAKE_DIR = "/opt/spark/data/lake"
 LAKE = "courses"
 LAKE_DIR = "{}/{}".format(ROOT_LAKE_DIR, LAKE)
 
-class Type(enum.Flag):
-    String = 1
-    Numeric = 1 << 1
-    Categorical = 1 << 2
-    Textual = 1 << 3
-    Datetime = 1 << 4
-
-    @staticmethod
-    def deserialize(string):
-        s = string.replace('Type.', '')
-        types = s.split('|')
-        itype = Type.String
-        for type in types:
-            if type == 'Textual':
-                itype = itype | Type.Textual
-            elif type == 'Categorical':
-                itype = itype | Type.Categorical
-            elif type == 'Numeric':
-                itype = itype | Type.Numeric
-            elif type == 'Datetime':
-                itype = itype | Type.Datetime
-        return itype
+#class Type(enum.Flag):
+#    String = 1
+#    Numeric = 1 << 1
+#    Categorical = 1 << 2
+#    Textual = 1 << 3
+#    Datetime = 1 << 4
+#
+#    @staticmethod
+#    def deserialize(string):
+#        s = string.replace('Type.', '')
+#        types = s.split('|')
+#        itype = Type.String
+#        for type in types:
+#            if type == 'Textual':
+#                itype = itype | Type.Textual
+#            elif type == 'Categorical':
+#                itype = itype | Type.Categorical
+#            elif type == 'Numeric':
+#                itype = itype | Type.Numeric
+#            elif type == 'Datetime':
+#                itype = itype | Type.Datetime
+#        return itype
 
 def is_number(s):
     try:
@@ -41,23 +41,23 @@ def is_number(s):
         return False
 
 def infer_type(i, rows_list, column):
-    inferred_type = Type.String
+    inferred_type = 'String'
     if rows_list:
         if is_number(rows_list[0]):
-            inferred_type = inferred_type | Type.Numeric
+            inferred_type = 'Numeric'
         try:
             if sum(1 for i in rows_list if re.match('\d{4}-\d{2}-\d{2}', i)) == len(rows_list):
-                inferred_type = inferred_type | Type.Datetime
+                inferred_type = 'Datetime'
             elif sum(1 for i in rows_list if re.match('\d{1,2}/\d{1,2}/\d{4}', i)) == len(rows_list):
-                inferred_type = inferred_type | Type.Datetime
+                inferred_type = 'Datetime'
         except AttributeError:
             pass
 
         if sum(map(len, rows_list)) / len(rows_list) > 30:
-            inferred_type = inferred_type | Type.Textual
+            inferred_type = 'Textual'
 
         if len(list(set(rows_list))) < 5:
-            inferred_type = inferred_type | Type.Categorical
+            inferred_type = 'Categorical'
     return inferred_type
 
 def get_common_words(final_rows_list, stop_words, drop_symbol_translator):
