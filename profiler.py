@@ -3,35 +3,13 @@ from collections import Counter
 from operator import itemgetter
 
 from pyspark.sql import SparkSession
+from pyspark.ml.feature import MinHashLSH
 spark = SparkSession.builder.appName("profiler").getOrCreate()
 sc = spark.sparkContext
 
 ROOT_LAKE_DIR = "/opt/spark/data/lake"
 LAKE = "courses"
 LAKE_DIR = "{}/{}".format(ROOT_LAKE_DIR, LAKE)
-
-#class Type(enum.Flag):
-#    String = 1
-#    Numeric = 1 << 1
-#    Categorical = 1 << 2
-#    Textual = 1 << 3
-#    Datetime = 1 << 4
-#
-#    @staticmethod
-#    def deserialize(string):
-#        s = string.replace('Type.', '')
-#        types = s.split('|')
-#        itype = Type.String
-#        for type in types:
-#            if type == 'Textual':
-#                itype = itype | Type.Textual
-#            elif type == 'Categorical':
-#                itype = itype | Type.Categorical
-#            elif type == 'Numeric':
-#                itype = itype | Type.Numeric
-#            elif type == 'Datetime':
-#                itype = itype | Type.Datetime
-#        return itype
 
 def is_number(s):
     try:
@@ -159,7 +137,6 @@ def map_column(i, table_name, rows_list, column):
     trait.append(itype)
     trait.append(common_words)
     trait.append(sample)
-    #trait.append([float(item) if is_number(item) else item for item in sample])
     return trait
 
 def search_dir():
@@ -169,4 +146,7 @@ def search_dir():
 tables_rdd = sc.parallelize(search_dir())
 profiles_rdd = tables_rdd.flatMap(lambda x: map_table(get_sample(ROOT_LAKE_DIR, x, 1000)))
 df = spark.createDataFrame(profiles_rdd)
+mh = MinHashLSH(inputCol="_6", outputCol="hashes", numHashTables=10)
+model = mh.fit(df)
+model.transform(df).show()
 df.show()
