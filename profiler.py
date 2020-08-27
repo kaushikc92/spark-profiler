@@ -143,7 +143,7 @@ def map_column(i, table_name, rows_list, column):
     column_lower = column.lower()
     word_tokens = delimiter_tokenize(column, "_")
     three_gram_tokens = qgram_tokenize(column, 3)
-    three_gram_nv_tokens = qgram_tokenize(column_lower.translate(drop_vowel_translator))
+    three_gram_nv_tokens = qgram_tokenize(column_lower.translate(drop_vowel_translator), 3)
     itype = infer_type(i, final_rows_list, column)
     common_words = get_common_words(final_rows_list, stop_words, drop_symbol_translator)
     ds = final_rows_list
