@@ -108,9 +108,9 @@ def delimiter_tokenize(inp, delim):
 
 def qgram_tokenize(inp, q):
     qgram_list = []
-    if len(input_string) < qval or qval < 1:
+    if len(inp) < q or q < 1:
         return qgram_list
-    qgram_list = [input_string[i:i + qval] for i in _range(len(input_string) - (qval - 1))]
+    qgram_list = [inp[i:i + q] for i in range(len(inp) - (q - 1))]
     return qgram_list
 
 def map_table(rows_list):
