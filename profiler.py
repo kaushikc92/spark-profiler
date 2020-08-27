@@ -10,7 +10,7 @@ LAKE_DIR = "{}/{}".format(ROOT_LAKE_DIR, LAKE)
 
 def get_sample(root_lake_dir, table_name, sample_size):
     file_path = "{}/{}".format(root_lake_dir, table_name)
-    stdoutdata = subprocess.check_output(['wc', '-l', file_name])
+    stdoutdata = subprocess.check_output(['wc', '-l', file_path])
     n_lines = stdoutdata.split()[0]
     try:
         f = open(file_path, encoding="utf-8")
