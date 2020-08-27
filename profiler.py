@@ -3,7 +3,8 @@ from collections import Counter
 from operator import itemgetter
 
 from pyspark.sql import SparkSession
-from pyspark.ml.feature import MinHashLSH
+from pyspark.ml import Pipeline
+from pyspark.ml.feature import MinHashLSH, HashingTF
 spark = SparkSession.builder.appName("profiler").getOrCreate()
 sc = spark.sparkContext
 
@@ -146,7 +147,6 @@ def search_dir():
 tables_rdd = sc.parallelize(search_dir())
 profiles_rdd = tables_rdd.flatMap(lambda x: map_table(get_sample(ROOT_LAKE_DIR, x, 1000)))
 df = spark.createDataFrame(profiles_rdd)
-mh = MinHashLSH(inputCol="_6", outputCol="hashes", numHashTables=10)
-model = mh.fit(df)
+
+model = Pipeline(stages=[HashingTF(inputCol="_6", outputCol="vectors"), MinHashLSH(inputCol="vectors", outputCol="hashes", numHashTables=10)]).fit(df)
 model.transform(df).show()
-df.show()
