@@ -40,9 +40,9 @@ def map_column(i, table_name, rows_list, column):
     trait.append(column)
     return trait
 
-def search_dir(dir_path):
-    files = glob.glob("{}/*.csv".format(dir_path), recursive=True)
-    return list(map(lambda x: os.path.relpath(x, dir_path), files))
+def search_dir():
+    files = glob.glob("{}/*.csv".format(LAKE_DIR), recursive=True)
+    return list(map(lambda x: os.path.relpath(x, ROOT_LAKE_DIR), files))
 
 tables_rdd = sc.parallelize(search_dir(LAKE_DIR))
 profiles_rdd = tables_rdd.flatMap(lambda x: map_table(get_sample(ROOT_LAKE_DIR, x, 1000)))
