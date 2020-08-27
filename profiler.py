@@ -1,4 +1,4 @@
-import glob, subprocess, random, csv
+import glob, subprocess, random, csv, os
 
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("profiler").getOrCreate()
