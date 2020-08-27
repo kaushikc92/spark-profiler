@@ -25,7 +25,7 @@ def get_sample(root_lake_dir, table_name, sample_size):
         for line in reader:
             result.append(line)
     else:
-        p = float(sample_size) / float(num_lines)
+        p = float(sample_size) / float(n_lines)
         for line in reader:
             if random.random() < p:
                 result.append(line)
