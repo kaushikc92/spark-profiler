@@ -9,6 +9,7 @@ LAKE = "courses"
 LAKE_DIR = "{}/{}".format(ROOT_LAKE_DIR, LAKE)
 
 def get_sample(root_lake_dir, table_name, sample_size):
+    print(table_name)
     file_path = "{}/{}".format(root_lake_dir, table_name)
     stdoutdata = subprocess.check_output(['wc', '-l', file_path])
     n_lines = stdoutdata.split()[0]
