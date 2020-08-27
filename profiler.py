@@ -30,6 +30,7 @@ def get_sample(root_lake_dir, table_name, sample_size):
             if random.random() < p:
                 result.append(line)
     f.close()
+    return result
 
 def map_table(rows_list):
     final = [map_column(i, rows_list[0], rows_list[2:], column) for i,column in enumerate(rows_list[1])]
