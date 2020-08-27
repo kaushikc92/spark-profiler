@@ -46,3 +46,5 @@ def search_dir(dir_path):
 
 tables_rdd = sc.parallelize(search_dir(LAKE_DIR))
 profiles_rdd = tables_rdd.flatMap(lambda x: map_table(get_sample(ROOT_LAKE_DIR, x, 1000)))
+df = spark.createDataFrame(profiles_rdd)
+df.show()
